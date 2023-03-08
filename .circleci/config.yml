@@ -10,6 +10,8 @@ jobs:
       - run:
           name: Create Cloudformation Stack
           command: |
+            pwd
+            ls
             aws cloudformation deploy \
               --template-file ec2.yml \
               --stack-name web \
