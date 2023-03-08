@@ -10,8 +10,6 @@ jobs:
       - run:
           name: Create Cloudformation Stack
           command: |
-            pwd
-            ls
             aws cloudformation deploy \
               --template-file ec2.yml \
               --stack-name web \
@@ -20,7 +18,7 @@ jobs:
       - run:
           name: make inventory file
           command: |
-            yum intall -y tar gzip
+            yum install -y tar gzip
             echo "[web]" > inventory.txt 
             echo "hello" >> inventory.txt
       
