@@ -18,8 +18,6 @@ jobs:
       - run:
           name: make inventory file
           command: |
-            pwd
-            ls
             yum install -y tar gzip
             echo "[web]" > inventory.txt 
             echo "hello" >> inventory.txt
