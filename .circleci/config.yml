@@ -28,10 +28,12 @@ jobs:
     steps:
       - checkout    
       - attach_workspace:
-          at: /root/project
+          at: .
       - run:
           name: Reading inventory file
           command: |
+            pwd
+            ls -l
             cat inventory.txt
 
       #- add_ssh_keys:
