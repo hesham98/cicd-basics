@@ -8,25 +8,28 @@ jobs:
       - checkout
       
       - run:
-          name: Configure server
+          name: Create Cloudformation Stack
           command: |
-            aws cloudformation deploy --template-file ec2.yml --stack-name web --region us-east-1
+            aws cloudformation deploy \
+              --template-file ec2.yml \
+              --stack-name web \
+              --region us-east-1
 
       - run:
-          name: Configure server
+          name: make inventory file
           command: |
             yum intall -y tar gzip
             echo "[web]" > inventory.txt 
             echo "hello" >> inventory.txt
       
-      - presist_to_workspace:
-          root: .
+      - persist_to_workspace:
+          root: ~/
           paths: 
-            - inventory.txt
+            - inventory.txt  
 
 workflows:
-  # Name the workflow "my_workflow"
-  my_workflow:
-    # Run the my_workflow/run job in its own container
+  # Name the workflow "welcome"
+  welcome:
+    # Run the welcome/run job in its own container
     jobs:
       - configure_infrastructure
