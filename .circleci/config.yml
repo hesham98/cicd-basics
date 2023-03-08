@@ -1,11 +1,12 @@
 version: 2.1
+
 jobs:
+
   create_infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
-      
       - run:
           name: Create Cloudformation Stack
           command: |
@@ -13,51 +14,46 @@ jobs:
               --template-file ec2.yml \
               --stack-name web \
               --region us-east-1
-
       - run:
           name: make inventory file
           command: |
             yum install -y tar gzip
             echo "[web]" > inventory.txt 
-            echo "hello" >> inventory.txt
-
+            aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt
       - persist_to_workspace:
           root: .
           paths: 
             - inventory.txt  
 
-  configure_infrastructure: 
+  server_configuration: 
     docker:
       - image: python:3.7-alpine3.11
     steps:
       - checkout    
+      - add_ssh_keys:
+         fingerprints: ["fe:49:f1:48:0e:f7:23:2c:3f:21:78:82:f1:b1:59:f2"] # You can get this ID in the section where you registered the SSH Key
       - attach_workspace:
           at: .
       - run:
           name: Reading inventory file
           command: |
-            pwd
-            ls -l
-            cat inventory.txt
-
-      #- add_ssh_keys:
-      #   fingerprints: ["0c:55:f7:d7:ad:e3:73:19:0b:e6:c6:46:5c:04:76:94"] # You can get this ID in the section where you registered the SSH Key
-      #- run:
-      #    name: Install dependencies
-      #    command: |
-      #      # install the dependencies needed for your playbook
-      #      apk add --update ansible 
-      #- run:
-      #    name: Configure server
-      #    command: |
-      #      ansible-playbook -i inventory.txt main4.yml
-
+            cat inventory.txt      
+      - run:
+         name: Install dependencies
+         command: |
+           # install the dependencies needed for your playbook
+           apk add gzip openssh ansible 
+      - run:
+         name: Configure server
+         command: |
+           ansible-playbook -i inventory.txt main.yml
+      
 
 workflows:
   welcome:
     jobs:
       - create_infrastructure
-      - configure_infrastructure:
+      - server_configuration:
           requires: 
             - create_infrastructure
 
