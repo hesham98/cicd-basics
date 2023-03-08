@@ -30,7 +30,7 @@ jobs:
     steps:
       - checkout    
       - attach_workspace:
-          at: .
+          at: /root/project
       - run:
           name: Reading inventory file
           command: |
