@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  configure_infrastructure: 
+  create_infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -22,7 +22,7 @@ jobs:
             echo "[web]" > inventory.txt 
             echo "hello" >> inventory.txt
 
-  server_configuration: 
+  configure_infrastructure: 
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -50,7 +50,10 @@ jobs:
 workflows:
   welcome:
     jobs:
-      - configure_infrastructure
-      - server_configuration
+      - create_infrastructure
+
+      - configure_infrastructure:
+          requires: 
+            - create_infrastructure
 
 
