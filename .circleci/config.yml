@@ -1,5 +1,4 @@
 version: 2.1
-
 jobs:
   create_infrastructure:
     docker:
@@ -61,5 +60,4 @@ workflows:
       - configure_infrastructure:
           requires: 
             - create_infrastructure
-#
 
