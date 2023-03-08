@@ -51,7 +51,6 @@ workflows:
   welcome:
     jobs:
       - create_infrastructure
-
       - configure_infrastructure:
           requires: 
             - create_infrastructure
