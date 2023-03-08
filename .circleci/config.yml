@@ -22,7 +22,7 @@ jobs:
             echo "[web]" > inventory.txt 
             echo "hello" >> inventory.txt
 
-      - set_into_workspace:
+      - persist_to_workspace:
           root: .
           paths: 
             - inventory.txt  
@@ -32,7 +32,7 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout    
-      - get_from_workspace:
+      - attach_workspace:
           at: .
       - run:
           name: Reading inventory file
