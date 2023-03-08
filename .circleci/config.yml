@@ -52,6 +52,5 @@ workflows:
     jobs:
       - configure_infrastructure
       - server_configuration
-          requires:
-            - configure_infrastructure
+
 
