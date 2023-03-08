@@ -1,0 +1,32 @@
+version: 2.1
+
+jobs:
+  configure_infrastructure: 
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      
+      - run:
+          name: Configure server
+          command: |
+            aws cloudformation deploy --template-file ec2.yml --stack-name web --region us-east-1
+
+      - run:
+          name: Configure server
+          command: |
+            yum intall -y tar gzip
+            echo "[web]" > inventory.txt 
+            echo "hello" >> inventory.txt
+      
+      - presist_to_workspace:
+          root: .
+          paths: 
+            - inventory.txt
+
+workflows:
+  # Name the workflow "my_workflow"
+  my_workflow:
+    # Run the my_workflow/run job in its own container
+    jobs:
+      - configure_infrastructure
