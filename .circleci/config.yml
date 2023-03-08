@@ -30,7 +30,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: reading inventory file
+          name: Reading inventory file
           command: |
             cat inventory.txt
 
