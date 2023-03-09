@@ -2,29 +2,29 @@
   become: yes
   remote_user: ubuntu
   taskes:
-    - name: "update apt cache"
+    - name: "Update the apt cache"
       apt:
         update_cache: yes
       when: ansible_os_family == "Debian" 
 
-    - name: "update yum cache"
+    - name: "Update the yum cache"
       yum:
         update_cache: yes
       when: ansible_os_family == "RedHat" 
 
-    - name: "install nginx on ubuntu"
+    - name: "Install nginx on ubuntu"
       apt:
         name: ['nginx', 'nginx-common']
         state: present
       when: ansible_os_family == "Debian" 
 
-    - name: "install nginx on ubuntu"
+    - name: "Install nginx on centos"
       yum:
         name: ['nginx']
         state: present
       when: ansible_os_family == "RedHat" 
 
-    - name: "enable nginx service"
+    - name: "Enable nginx service"
       service:
         name: nginx
         state: restarted
