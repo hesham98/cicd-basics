@@ -1,36 +1,32 @@
-Resources:
+- hosts: all
+  become: yes
+  remote_user: ubuntu
+  taskes:
+    - name: "update apt cache"
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian" 
 
-  NetworkStack:
-    Type: 'AWS::CloudFormation::Stack'
-    Properties:
-      TemplateURL: final-project-network.yml
-      Parameters: 
-        EnvironmentName : "HAWebApp"
-        VpcCIDR: "10.0.0.0/16"
-        PublicSubnet1CIDR: "10.0.0.0/24"
-        PublicSubnet2CIDR: "10.0.1.0/24"
-        PrivateSubnet1CIDR: "10.0.2.0/24"
-        PrivateSubnet2CIDR: "10.0.3.0/24"
+    - name: "update yum cache"
+      yum:
+        update_cache: yes
+      when: ansible_os_family == "RedHat" 
 
-  ServerStack:
-    Type: 'AWS::CloudFormation::Stack'
-    Properties:
-      TemplateURL: final-project-servers.yml
-      Parameters: 
-        EnvironmentName : "HAWebApp"
-        ASGMinSize: "4"
-        ASGMaxSize: "8"
-        EC2ImageId: "ami-0729e439b6769d6ab"
-        EC2InstanceType: "t3.medium"
-        EBSVolumeSize: "10"
-        # Dependencies
-        VPC: !GetAtt NetworkStack.Outputs.VPC
-        VPCPublicRouteTable: !GetAtt NetworkStack.Outputs.VPCPublicRouteTable
-        VPCPrivateRouteTable1: !GetAtt NetworkStack.Outputs.VPCPrivateRouteTable1
-        VPCPrivateRouteTable2: !GetAtt NetworkStack.Outputs.VPCPrivateRouteTable2
-        PublicSubnets: !GetAtt NetworkStack.Outputs.PublicSubnets
-        PrivateSubnets: !GetAtt NetworkStack.Outputs.PrivateSubnets
-        PublicSubnet1: !GetAtt NetworkStack.Outputs.PublicSubnet1
-        PublicSubnet2: !GetAtt NetworkStack.Outputs.PublicSubnet2
-        PrivateSubnet1: !GetAtt NetworkStack.Outputs.PrivateSubnet1
-        PrivateSubnet2: !GetAtt NetworkStack.Outputs.PrivateSubnet2
+    - name: "install nginx on ubuntu"
+      apt:
+        name: ['nginx', 'nginx-common']
+        state: present
+      when: ansible_os_family == "Debian" 
+
+    - name: "install nginx on ubuntu"
+      yum:
+        name: ['nginx']
+        state: present
+      when: ansible_os_family == "RedHat" 
+
+    - name: "enable nginx service"
+      service:
+        name: nginx
+        state: restarted
+        enable: yes
+      when: ansible_os_family == "RedHat" 
