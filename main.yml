@@ -1,5 +1,5 @@
 - hosts: web
-  become: yes
+  become: true
   remote_user: ubuntu
   taskes:
     - name: "Update the apt cache"
