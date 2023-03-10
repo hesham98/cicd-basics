@@ -54,7 +54,7 @@ jobs:
     steps:
       - run: apk add --update curl
       - run:
-          name: smoke test
+          name: test the code by smoke test
           command: |
             URL="https://blog.udacity.com/"
             # Test if website exists
@@ -68,11 +68,10 @@ jobs:
   unit_test:
     docker:
       - image: node:alpine
-      
     steps:
       - checkout
       - run:
-          name: test the code
+          name: test the code by unit test
           command: |
             cd unittest
             npm i

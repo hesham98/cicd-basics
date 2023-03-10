@@ -17,7 +17,7 @@ math.multiply = (a, b) => {
 }
 
 math.divide = (a, b) => {
-  if (b === 0) return "Invalid"
+  //if (b === 0) return "Invalid"
   return a / b;
 }
 
