@@ -68,7 +68,9 @@ jobs:
   unit_test:
     docker:
       - image: node:alpine
+      
     steps:
+      - checkout
       - run:
           name: test the code
           command: |
