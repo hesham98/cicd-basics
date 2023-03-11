@@ -27,7 +27,8 @@ jobs:
               --region us-east-1
       #delete line number 29 30 31 and it wil be run if not delete command section at the top of this script
       - run: return 1
-      - destroy_environment
+      - destroy_environment:
+          when: on_fail
         
       - run:
           name: make inventory file
