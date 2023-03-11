@@ -1,7 +1,7 @@
 version: 2.1
 
 commands:
-      destroy_environment:
+  destroy_environment:
     steps:
       - run:
           name: Destroy environment
@@ -22,9 +22,9 @@ jobs:
               --template-file ec2.yml \
               --stack-name web \
               --region us-east-1
-      #delete line number 29 30 31 and it wil be run if not delete command section at the top of this script
+
       - destroy_environment
-        
+          
       - run:
           name: make inventory file
           command: |
